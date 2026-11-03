@@ -1,0 +1,98 @@
+<!-- index.html -->
+<!-- Main responsive interface for the audio converter. -->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090914">
+  <meta name="description" content="İzinli içeriklerinizi MP3 formatına dönüştürün.">
+  <title>WaveConvert — Audio Converter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="background-glow glow-one" aria-hidden="true"></div>
+  <div class="background-glow glow-two" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <a href="#" class="brand" aria-label="WaveConvert ana sayfa">
+      <span class="brand-icon">W</span>
+      <span>Wave<span class="brand-accent">Convert</span></span>
+    </a>
+    <span class="status"><span class="status-dot"></span> Audio Converter</span>
+  </header>
+
+  <main class="main-container">
+    <section class="hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span>SIMPLE AUDIO CONVERSION</div>
+      <h1>Your Audio.<br><span>Your Format.</span></h1>
+      <p class="subtitle">İndirme ve dönüştürme iznine sahip olduğunuz içerikleri MP3 formatına dönüştürün.</p>
+    </section>
+
+    <section class="converter-card" aria-labelledby="converterTitle">
+      <div class="card-top">
+        <div>
+          <h2 id="converterTitle">Audio Converter</h2>
+          <p>Video bağlantınızı aşağıya yapıştırın.</p>
+        </div>
+        <div class="audio-icon" aria-hidden="true">♪</div>
+      </div>
+
+      <form id="convertForm">
+        <label for="videoUrl">VIDEO URL</label>
+        <div class="input-wrapper">
+          <span class="input-icon" aria-hidden="true">↗</span>
+          <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." autocomplete="url" required>
+        </div>
+
+        <button type="submit" id="convertButton">
+          <span id="buttonText">Dönüştür</span>
+          <span id="spinner" class="spinner hidden" aria-hidden="true"></span>
+          <span id="buttonArrow" aria-hidden="true">→</span>
+        </button>
+      </form>
+
+      <div id="message" class="message hidden" role="status" aria-live="polite"></div>
+
+      <div id="result" class="result hidden">
+        <div class="result-info">
+          <div class="file-icon" aria-hidden="true">♫</div>
+          <div class="file-details">
+            <span class="file-label">READY TO DOWNLOAD</span>
+            <h3 id="fileTitle">Audio file</h3>
+            <span class="file-format">MP3 AUDIO</span>
+          </div>
+        </div>
+        <a id="downloadButton" class="download-button" href="#">MP3 İndir <span aria-hidden="true">↓</span></a>
+      </div>
+
+      <div class="card-footer">
+        <span>MP3 FORMAT</span><span>•</span>
+        <span>HIGH QUALITY</span><span>•</span>
+        <span>TEMPORARY DOWNLOAD</span>
+      </div>
+    </section>
+
+    <section class="features" aria-label="Nasıl çalışır">
+      <article class="feature">
+        <span class="feature-number">01</span>
+        <h3>Paste</h3>
+        <p>İzinli içerik bağlantısını yapıştır.</p>
+      </article>
+      <article class="feature">
+        <span class="feature-number">02</span>
+        <h3>Convert</h3>
+        <p>Sunucuda ses formatına dönüştür.</p>
+      </article>
+      <article class="feature">
+        <span class="feature-number">03</span>
+        <h3>Download</h3>
+        <p>Hazırlanan MP3 dosyasını indir.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer><p>© 2026 WaveConvert. Use only content you are authorized to download.</p></footer>
+  <script src="script.js"></script>
+</body>
+</html>
