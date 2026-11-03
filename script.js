@@ -1,9 +1,8 @@
 /* script.js */
 /* Handles API requests, loading states, errors and MP3 downloads. */
 
-// Replace this with your deployed Render backend URL.
-// Example: https://youtube-mp3-backend.onrender.com
-const API_BASE_URL = "https://YOUR-RENDER-URL.onrender.com";
+// Render backend service.
+const API_BASE_URL = "https://youtube-mp3-api-0crg.onrender.com";
 
 const form = document.getElementById("convertForm");
 const videoInput = document.getElementById("videoUrl");
@@ -78,11 +77,6 @@ form.addEventListener("submit", async (event) => {
   const url = videoInput.value.trim();
   if (!url) {
     showMessage("Lütfen bir bağlantı girin.");
-    return;
-  }
-
-  if (!API_BASE_URL.startsWith("https://") || API_BASE_URL.includes("YOUR-RENDER-URL")) {
-    showMessage("Önce script.js içerisindeki API_BASE_URL değerini Render adresinizle değiştirin.");
     return;
   }
 
