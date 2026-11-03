@@ -1,0 +1,121 @@
+/* script.js */
+/* Handles API requests, loading states, errors and MP3 downloads. */
+
+// Replace this with your deployed Render backend URL.
+// Example: https://youtube-mp3-backend.onrender.com
+const API_BASE_URL = "https://YOUR-RENDER-URL.onrender.com";
+
+const form = document.getElementById("convertForm");
+const videoInput = document.getElementById("videoUrl");
+const convertButton = document.getElementById("convertButton");
+const buttonText = document.getElementById("buttonText");
+const spinner = document.getElementById("spinner");
+const buttonArrow = document.getElementById("buttonArrow");
+const message = document.getElementById("message");
+const result = document.getElementById("result");
+const fileTitle = document.getElementById("fileTitle");
+const downloadButton = document.getElementById("downloadButton");
+
+let activeDownloadToken = null;
+
+function showMessage(text, type = "error") {
+  message.textContent = text;
+  message.className = `message ${type}`;
+  message.classList.remove("hidden");
+}
+
+function hideMessage() {
+  message.classList.add("hidden");
+}
+
+function setLoading(isLoading) {
+  convertButton.disabled = isLoading;
+  spinner.classList.toggle("hidden", !isLoading);
+  buttonArrow.classList.toggle("hidden", isLoading);
+  buttonText.textContent = isLoading ? "Dönüştürülüyor..." : "Dönüştür";
+}
+
+function resetResult() {
+  result.classList.add("hidden");
+  activeDownloadToken = null;
+  downloadButton.href = "#";
+  downloadButton.style.opacity = "";
+  downloadButton.style.pointerEvents = "";
+  downloadButton.innerHTML = 'MP3 İndir <span aria-hidden="true">↓</span>';
+}
+
+async function convertVideo(url) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 130000);
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/convert`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url }),
+      signal: controller.signal
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || `Sunucu hatası (HTTP ${response.status}).`);
+    }
+
+    if (!data.token) {
+      throw new Error("Sunucu geçerli bir indirme token'ı döndürmedi.");
+    }
+
+    return data;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const url = videoInput.value.trim();
+  if (!url) {
+    showMessage("Lütfen bir bağlantı girin.");
+    return;
+  }
+
+  if (!API_BASE_URL.startsWith("https://") || API_BASE_URL.includes("YOUR-RENDER-URL")) {
+    showMessage("Önce script.js içerisindeki API_BASE_URL değerini Render adresinizle değiştirin.");
+    return;
+  }
+
+  hideMessage();
+  resetResult();
+  setLoading(true);
+
+  try {
+    const data = await convertVideo(url);
+    activeDownloadToken = data.token;
+    fileTitle.textContent = data.title || "Audio file";
+
+    downloadButton.href = `${API_BASE_URL}/api/download/${encodeURIComponent(data.token)}`;
+    result.classList.remove("hidden");
+    showMessage("Dönüştürme tamamlandı. MP3 dosyanız hazır.", "success");
+  } catch (error) {
+    const errorMessage = error.name === "AbortError"
+      ? "İstek zaman aşımına uğradı. Sunucu geç açılmış veya işlem uzamış olabilir."
+      : (error.message || "Sunucuya bağlanırken hata oluştu.");
+    showMessage(errorMessage);
+  } finally {
+    setLoading(false);
+  }
+});
+
+downloadButton.addEventListener("click", () => {
+  if (!activeDownloadToken) return;
+
+  // The backend deletes the temporary file after the response is sent.
+  activeDownloadToken = null;
+  downloadButton.style.opacity = "0.6";
+  downloadButton.style.pointerEvents = "none";
+  downloadButton.textContent = "İndirme başlatıldı";
+});
+
+videoInput.addEventListener("input", hideMessage);
