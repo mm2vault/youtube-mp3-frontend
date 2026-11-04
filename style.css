@@ -304,3 +304,13 @@ footer {
   .card-footer { font-size: 8px; gap: 7px; }
   .navbar { padding: 20px 0; }
 }
+
+.or-divider{display:flex;align-items:center;gap:13px;margin:24px 0;color:#827d9e;font-size:9px;font-weight:800;letter-spacing:1.5px}
+.or-divider span{height:1px;flex:1;background:var(--border)}
+.label-muted{color:#77728f;font-weight:500;letter-spacing:.6px}
+.file-picker{min-height:88px;border:1px dashed #9272ff70;border-radius:13px;background:#09091480;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;cursor:pointer;text-align:center;padding:14px}
+.file-picker:hover{border-color:#b19aff;background:#9272ff10}
+.file-picker-icon{font-size:22px;color:#b49cff}
+.file-picker-hint{font-size:9px;color:#77728f;line-height:1.5}
+.secondary-button{width:100%;min-height:52px;border:1px solid #9272ff70;border-radius:13px;margin-top:12px;cursor:pointer;background:#9272ff18;color:#d9ceff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:12px}
+.secondary-button:disabled{opacity:.65;cursor:not-allowed}
