@@ -52,6 +52,13 @@
         </button>
       </form>
 
+      <div class="or-divider"><span></span>VEYA DOSYA YÜKLE<span></span></div>
+      <form id="uploadForm">
+        <label for="mediaFile">MEDYA DOSYASI <span class="label-muted">· MAX 100 MB · MAX 60 DK</span></label>
+        <label class="file-picker" for="mediaFile"><span class="file-picker-icon">＋</span><span id="fileName">Cihazından dosya seç</span><span class="file-picker-hint">MP4 · MOV · MKV · WEBM · MP3 · WAV · M4A · AAC · OGG · FLAC</span></label>
+        <input type="file" id="mediaFile" accept=".mp4,.mov,.mkv,.webm,.mp3,.wav,.m4a,.aac,.ogg,.flac,audio/*,video/*" hidden>
+        <button type="submit" id="uploadButton" class="secondary-button"><span id="uploadButtonText">Dosyayı MP3'e dönüştür</span><span id="uploadSpinner" class="spinner hidden" aria-hidden="true"></span><span id="uploadArrow" aria-hidden="true">→</span></button>
+      </form>
       <div id="message" class="message hidden" role="status" aria-live="polite"></div>
 
       <div id="result" class="result hidden">
