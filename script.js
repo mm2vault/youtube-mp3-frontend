@@ -113,3 +113,46 @@ downloadButton.addEventListener("click", () => {
 });
 
 videoInput.addEventListener("input", hideMessage);
+
+const uploadForm = document.getElementById("uploadForm");
+const mediaFile = document.getElementById("mediaFile");
+const uploadButton = document.getElementById("uploadButton");
+const uploadSpinner = document.getElementById("uploadSpinner");
+const uploadArrow = document.getElementById("uploadArrow");
+const uploadButtonText = document.getElementById("uploadButtonText");
+
+mediaFile.addEventListener("change", () => {
+  document.getElementById("fileName").textContent = mediaFile.files[0]?.name || "Cihazından dosya seç";
+  hideMessage();
+});
+uploadForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const file = mediaFile.files[0];
+  if (!file) return showMessage("Önce cihazından bir medya dosyası seç.");
+  if (file.size > 100 * 1024 * 1024) return showMessage("Dosya 100 MB sınırını aşıyor.");
+  hideMessage();
+  resetResult();
+  uploadButton.disabled = true;
+  uploadSpinner.classList.remove("hidden");
+  uploadArrow.classList.add("hidden");
+  uploadButtonText.textContent = "Dönüştürülüyor...";
+  try {
+    const body = new FormData();
+    body.append("file", file);
+    const response = await fetch(`${API_BASE_URL}/api/convert-file`, { method: "POST", body });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || `Sunucu hatası (HTTP ${response.status}).`);
+    activeDownloadToken = data.token;
+    fileTitle.textContent = data.title || file.name;
+    downloadButton.href = `${API_BASE_URL}/api/download/${encodeURIComponent(data.token)}`;
+    result.classList.remove("hidden");
+    showMessage("Dosya MP3'e dönüştürüldü. İndirmeye hazır.", "success");
+  } catch (error) {
+    showMessage(error.message || "Dosya dönüştürülemedi.");
+  } finally {
+    uploadButton.disabled = false;
+    uploadSpinner.classList.add("hidden");
+    uploadArrow.classList.remove("hidden");
+    uploadButtonText.textContent = "Dosyayı MP3'e dönüştür";
+  }
+});
